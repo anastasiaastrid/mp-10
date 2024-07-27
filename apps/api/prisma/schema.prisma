@@ -77,3 +77,83 @@ model Order {
   event         Event     @relation(fields: [eventId], references: [id])
   ticket        Ticket    @relation(fields: [ticketId], references: [id])
 }
+
+model User {
+  userId        Int    @id @default(autoincrement())
+  username  String @unique 
+  email     String @unique
+  password  String 
+  firstname String?
+  lastname  String?
+  isVerified Boolean @default(false)
+  roleId    Int 
+  role      Role @relation(fields: [roleId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  referralCode  String  @unique
+  referredBy String?
+  usedReferral  Boolean @default(false) 
+  Points        Points[]
+  DiscountCoupons DiscountCoupon[] @relation("UserDiscounts")
+  Profile       Profile?
+  shippingAddresses ShippingAddress[]
+}
+
+model Role {
+  id   Int     @id @default(autoincrement())
+  name String  @unique
+  users User[]
+}
+
+model Points {
+  pointsId            Int      @id @default(autoincrement())
+  pointsBalance       Int
+  userId              Int
+  expiryDate          DateTime
+  User                User     @relation(fields: [userId], references: [userId])
+  PointsExpiryDates    PointsExpiry[]
+}
+
+model PointsExpiry {
+  pointsExpiryId  Int       @id @default(autoincrement())
+  expiryDate      DateTime
+  pointsId        Int
+  Points          Points    @relation(fields: [pointsId], references: [pointsId])
+}
+
+
+model DiscountCoupon {
+  code             String    @id
+  userId           Int
+  discountAmount   Float
+  expiryDate       DateTime
+  User             User      @relation("UserDiscounts", fields: [userId], references: [userId])
+}
+
+
+model Profile {
+  userId    Int    @id @unique
+  firstName String
+  lastName  String
+  cellPhone String
+  company   String?
+  website   String?
+
+  user User @relation(fields: [userId], references: [userId])
+
+  @@map("profiles")
+}
+
+model ShippingAddress {
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  address    String
+  city       String
+  country    String
+  postalCode String
+  state      String
+
+  user User @relation(fields: [userId], references: [userId])
+
+  @@map("shipping_addresses")
+}

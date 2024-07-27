@@ -60,7 +60,7 @@ const Reviews = ({ eventId }: IReviewsProps) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/events/${eventId}/reviews`,
+        `http://localhost:8080/api/events/${eventId}/createreviews`,
         {
           method: 'POST',
           headers: {

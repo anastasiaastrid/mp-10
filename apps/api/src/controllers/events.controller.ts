@@ -163,7 +163,4 @@ export class EventsController {
       next(new HttpException(500, 'Failed to delete event'));
     }
   };
-
-
-  
 }
