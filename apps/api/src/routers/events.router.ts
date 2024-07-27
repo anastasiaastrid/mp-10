@@ -44,10 +44,6 @@ export class EventsRouter implements Routes {
       `${this.path}/:id/createreviews`,
       this.eventsController.createReviewController,
     );
-    this.router.put(
-      `${this.path}/:updatereviews`,
-      this.eventsController.updateEventController,
-    );
   }
 }
 
