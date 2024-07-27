@@ -1,24 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { CheckoutActions } from '@/actions/checkout.actions';
 
 export class CheckoutController {
-  public async createCheckout(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private checkoutActions: CheckoutActions;
+
+  constructor() {
+    this.checkoutActions = new CheckoutActions();
+  }
+
+  public createCheckout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { eventId, tickets } = req.body;
-
-      const createdOrders = await Promise.all(tickets.map(async (ticket: any) => {
-        const createdOrder = await prisma.order.create({
-          data: {
-            eventId,
-            ticketId: ticket.id,
-            quantity: ticket.count,
-            totalPrice: ticket.price * ticket.count,
-          },
-        });
-        return createdOrder;
-      }));
+      const createdOrders = await this.checkoutActions.createCheckoutAction(eventId, tickets);
 
       res.status(201).json(createdOrders);
     } catch (error: any) {

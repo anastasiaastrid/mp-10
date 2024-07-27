@@ -52,8 +52,11 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
       }
 
       const result = await response.json();
+      console.log('Checkout result:', result);
       onClose();
-    } catch (error) {}
+    } catch (error) {
+      console.error('Checkout error:', error);
+    }
   };
 
   return (

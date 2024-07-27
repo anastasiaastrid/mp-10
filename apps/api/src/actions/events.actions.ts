@@ -15,7 +15,7 @@ export class EventActions {
           location: true,
           price: true,
           organizerName: true,
-          description:true,
+          description: true,
           category: {
             select: {
               name: true,
